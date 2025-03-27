@@ -16,53 +16,60 @@ describe("Aside", () => {
     expect(screen.getByRole("button")).toBeDefined();
   });
 
-  it("должен открывать Drawer при клике на кнопку", () => {
+  it("должен открывать Drawer при клике на кнопку", async () => {
     render(
       <ChakraProvider value={system}>
         <Aside />
       </ChakraProvider>,
     );
+    await vi.waitFor(() => {
+      const triggerButton = screen.getAllByRole("button");
+      fireEvent.click(triggerButton[0]);
 
-    const triggerButton = screen.getByRole("button");
-    fireEvent.click(triggerButton);
-
-    expect(screen.getByText("Дополнительная информация")).toBeDefined();
+      expect(screen.getByText("Дополнительная информация")).toBeDefined();
+    });
   });
 
-  it("должен закрывать Drawer при клике на кнопку Close", () => {
+  it("должен закрывать Drawer при клике на кнопку Close", async () => {
     render(
       <ChakraProvider value={system}>
         <Aside />
       </ChakraProvider>,
     );
+    const [triggerButton] = screen.getAllByRole("button");
 
-    // Открываем Drawer
-    const triggerButton = screen.getByRole("button");
     fireEvent.click(triggerButton);
-
-    // Находим и кликаем на кнопку закрытия
-    const closeButton = screen.getByText("Закрыть");
+    await vi.waitFor(() => {
+      expect(
+        screen.getByText("Дополнительная информация", { selector: "h2" }),
+      ).toBeInTheDocument();
+    });
+    const closeButton = screen.getByText("Закрыть", { selector: "button" });
     fireEvent.click(closeButton);
-
-    // Проверяем, что Drawer закрылся
-    expect(screen.queryByText("Дополнительная информация")).toBeNull();
+    await vi.waitFor(() => {
+      expect(
+        screen.queryByText("Дополнительная информация", { selector: "h2" }),
+      ).not.toBeInTheDocument();
+    });
   });
 
-  it("должен отображать список функций", () => {
+  it("должен отображать список функций", async () => {
     render(
       <ChakraProvider value={system}>
         <Aside />
       </ChakraProvider>,
     );
 
-    // Открываем Drawer
-    const triggerButton = screen.getByRole("button");
+    const [triggerButton] = screen.getAllByRole("button");
+
     fireEvent.click(triggerButton);
+    await vi.waitFor(() => {
+      expect(screen.getByText("Drag n drop")).toBeDefined();
+      expect(screen.getByText("Смена темы")).toBeDefined();
+      expect(screen.getByText("Persist")).toBeDefined();
+      expect(screen.getByText("Добавление подзадач")).toBeDefined();
+    });
 
     // Проверяем наличие всех пунктов списка
-    expect(screen.getByText("Drag n drop")).toBeDefined();
-    expect(screen.getByText("Смена темы")).toBeDefined();
-    expect(screen.getByText("Persist")).toBeDefined();
-    expect(screen.getByText("Добавление подзадач")).toBeDefined();
   });
 });

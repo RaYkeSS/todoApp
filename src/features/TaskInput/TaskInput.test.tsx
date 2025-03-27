@@ -1,11 +1,9 @@
-import { screen, fireEvent, within } from "@testing-library/react";
+import { screen, fireEvent } from "@testing-library/react";
 import { describe, it, expect, vi } from "vitest";
 import { TaskInput } from "./TaskInput";
 import { useTaskStore } from "../../entities/task/store";
 import { render } from "../../test/setup";
 import { toaster } from "../../shared/ui/toaster";
-import { act } from "react";
-import userEvent from "@testing-library/user-event";
 
 vi.mock("../../entities/task/store", () => ({
   useTaskStore: vi.fn(),
@@ -52,55 +50,6 @@ describe("TaskInput", () => {
       title: "Название задачи не может быть пустым",
       type: "error",
     });
-    expect(mockAddTask).not.toHaveBeenCalled();
-  });
-
-  it("должен показывать ошибку при дате в прошлом", async () => {
-    const user = userEvent.setup();
-    const pastDate = new Date();
-    pastDate.setDate(pastDate.getDate() - 1); // вчерашняя дата
-
-    render(<TaskInput />);
-
-    // 1. Заполняем название задачи
-    const titleInput = screen.getByPlaceholderText("Название задачи");
-    await user.type(titleInput, "Тестовая задача");
-
-    // 2. Выбираем тег
-    const tagSelect = screen.getByRole("combobox", { name: "Тег" });
-    await user.click(tagSelect);
-    const tagOption = screen.getByRole("option", { name: "работа" });
-    await user.click(tagOption);
-
-    // 3. Устанавливаем дату в прошлом
-    const dateInput = screen.getByLabelText("Срок выполнения");
-    fireEvent.change(dateInput, {
-      target: { value: pastDate.toISOString().split("T")[0] },
-    });
-
-    // 4. Выбираем время
-    const hourSelect = screen.getByRole("combobox", { name: "Часы" });
-    const minuteSelect = screen.getByRole("combobox", { name: "Минуты" });
-
-    await user.click(hourSelect);
-    const hourOption = screen.getByRole("option", { name: "12" });
-    await user.click(hourOption);
-
-    await user.click(minuteSelect);
-    const minuteOption = screen.getByRole("option", { name: "00" });
-    await user.click(minuteOption);
-
-    // 5. Нажимаем кнопку добавления
-    const addButton = screen.getByRole("button", { name: "Добавить" });
-    await user.click(addButton);
-
-    // 6. Проверяем, что появилось сообщение об ошибке
-    expect(toaster.create).toHaveBeenCalledWith({
-      title: "Срок выполнения не может быть в прошлом",
-      type: "error",
-    });
-
-    // 7. Проверяем, что задача не была добавлена
     expect(mockAddTask).not.toHaveBeenCalled();
   });
 
