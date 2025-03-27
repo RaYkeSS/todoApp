@@ -203,3 +203,5 @@ export const DndTaskList = () => {
     </DndContext>
   );
 };
+
+export default DndTaskList;

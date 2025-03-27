@@ -1,6 +1,6 @@
-import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
-import { Task, SubTask } from './types';
+import { create } from "zustand";
+import { persist } from "zustand/middleware";
+import { Task } from "./types";
 
 interface TaskStore {
   tasks: Task[];
@@ -36,13 +36,13 @@ export const useTaskStore = create<TaskStore>()(
       toggleTask: (taskId) =>
         set((state) => ({
           tasks: state.tasks.map((task) =>
-            task.id === taskId ? { ...task, completed: !task.completed } : task
+            task.id === taskId ? { ...task, completed: !task.completed } : task,
           ),
         })),
       deleteTask: (taskId) =>
         set((state) => ({
           tasks: state.tasks.map((task) =>
-            task.id === taskId ? { ...task, deleted: true } : task
+            task.id === taskId ? { ...task, deleted: true } : task,
           ),
         })),
       addSubtask: (taskId, title) =>
@@ -60,7 +60,7 @@ export const useTaskStore = create<TaskStore>()(
                     },
                   ],
                 }
-              : task
+              : task,
           ),
         })),
       toggleSubtask: (taskId, subtaskId) =>
@@ -72,21 +72,21 @@ export const useTaskStore = create<TaskStore>()(
                   subtasks: task.subtasks.map((subtask) =>
                     subtask.id === subtaskId
                       ? { ...subtask, completed: !subtask.completed }
-                      : subtask
+                      : subtask,
                   ),
                 }
-              : task
+              : task,
           ),
         })),
       updateTask: (taskId, updates) =>
         set((state) => ({
           tasks: state.tasks.map((task) =>
-            task.id === taskId ? { ...task, ...updates } : task
+            task.id === taskId ? { ...task, ...updates } : task,
           ),
         })),
     }),
     {
-      name: 'task-storage',
-    }
-  )
-); 
+      name: "task-storage",
+    },
+  ),
+);

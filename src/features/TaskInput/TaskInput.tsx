@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { Box, Input, Button, VStack, Text, HStack } from "@chakra-ui/react";
-import { useTaskStore } from "../../entities/task/store";
+import { useTaskStore } from "@entities/task/store";
 import { format } from "date-fns";
-import { toaster } from "../../shared/ui/toaster";
+import { toaster } from "@shared/ui/toaster";
 import "react-day-picker/style.css";
 import { Popover } from "@chakra-ui/react";
-import { DateTimePicker } from "../../shared/ui/DateTimePicker";
+import { DateTimePicker } from "@shared/ui/DateTimePicker";
 
 export const TaskInput = () => {
   const [title, setTitle] = useState("");
@@ -113,3 +113,5 @@ export const TaskInput = () => {
     </Box>
   );
 };
+
+export default TaskInput;

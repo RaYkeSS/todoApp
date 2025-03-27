@@ -65,3 +65,5 @@ export const Aside = () => {
     </Drawer.Root>
   );
 };
+
+export default Aside;

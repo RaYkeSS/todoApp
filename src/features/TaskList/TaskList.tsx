@@ -1,27 +1,16 @@
 import { useState } from "react";
-import {
-  Box,
-  VStack,
-  HStack,
-  Text,
-  Checkbox,
-  IconButton,
-  Badge,
-  useDisclosure,
-  Button,
-  Input,
-} from "@chakra-ui/react";
+import { Box, VStack, HStack, Text, IconButton } from "@chakra-ui/react";
 import { FiChevronDown, FiChevronUp } from "react-icons/fi";
 import { format, isValid } from "date-fns";
 import { ru } from "date-fns/locale";
-import { Task } from "../../entities/task/types";
-import { useTaskStore } from "../../entities/task/store";
+import { Task } from "@entities/task/types";
+import { useTaskStore } from "@entities/task/store";
 import {
   SortableContext,
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { SortableTaskItem } from "../TaskItem/TaskItem";
-import { toaster } from "../../shared/ui/toaster";
+import { toaster } from "@shared/ui/toaster";
 
 interface TaskListProps {
   tasks: Task[];
@@ -29,7 +18,7 @@ interface TaskListProps {
   type: "active" | "completed";
 }
 
-export const TaskList = ({ tasks, title, type }: TaskListProps) => {
+export const TaskList = ({ tasks, title }: TaskListProps) => {
   const [isOpen, setIsOpen] = useState(true);
   const [newSubtask, setNewSubtask] = useState("");
   const [activeTaskId, setActiveTaskId] = useState<string | null>(null);
